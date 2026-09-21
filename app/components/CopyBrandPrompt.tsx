@@ -26,7 +26,7 @@ export default function CopyBrandPrompt() {
   async function copy() {
     const prompt = buildBrandPrompt();
     try {
-      if (navigator.clipboard?.writeText) {
+      if (typeof navigator.clipboard?.writeText === "function") {
         await writeClipboard(prompt);
       } else {
         writeClipboardFallback(prompt);
