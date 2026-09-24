@@ -40,7 +40,7 @@ function Marquee() {
 export default function Home() {
   return (
     <main id="top">
-      <section className="hero">
+      <section className="hero" id="hero">
         <SectionBg src="/Assets/hero.png" mode="hero" />
         <HeroDraw />
         <p className="scroll-note">The work, not the pitch ↓</p>

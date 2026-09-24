@@ -1,9 +1,22 @@
 @import "tailwindcss";
 
+@property --page-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f5f5f2;
+}
+
+@property --page-fg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111111;
+}
+
 :root {
   --paper: #f5f5f2;
   --ink: #111111;
   --cream: #f7f7f2;
+  --night: #0c0c0c;
   --purple: #824591;
   --pink: #dc9feb;
   --deep-purple: #28132c;
@@ -12,6 +25,10 @@
   --muted: #5e5e59;
   --dark-muted: #9a9a96;
   --surface: #ffffff;
+  --page-bg: var(--paper);
+  --page-fg: var(--ink);
+  --page-muted: var(--muted);
+  color-scheme: light;
   --max: 1200px;
   --nav-h: 64px;
   --nav-top: 18px;
@@ -66,14 +83,17 @@
 
 html {
   scroll-behavior: smooth;
-  background: var(--paper);
+  background: var(--page-bg);
   overflow-x: clip;
+  transition:
+    --page-bg 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    --page-fg 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
   margin: 0;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--page-bg);
+  color: var(--page-fg);
   font-family: var(--font-sans);
   font-size: var(--text-base);
   line-height: var(--leading);
@@ -81,6 +101,16 @@ body {
   max-width: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.night {
+  --page-bg: var(--night);
+  --page-fg: var(--cream);
+  --page-muted: var(--dark-muted);
+  color-scheme: dark;
 }
 
 a {
@@ -135,14 +165,26 @@ a {
   display: flex;
   align-items: center;
   gap: 12px;
-  border: 1px solid rgb(17 17 17 / 0.07);
+  border: 1px solid color-mix(in srgb, var(--page-fg) 7%, transparent);
   border-radius: 20px;
-  background: rgb(247 247 242 / 0.78);
+  background: color-mix(in srgb, var(--page-bg) 78%, transparent);
+  color: var(--page-fg);
   backdrop-filter: blur(18px) saturate(1.15);
   -webkit-backdrop-filter: blur(18px) saturate(1.15);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.65),
     0 10px 30px rgb(17 17 17 / 0.06);
+  transition:
+    background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.night .nav {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 10px 30px rgb(0 0 0 / 0.35);
 }
 
 .brand {
@@ -169,7 +211,7 @@ a {
   min-height: 40px;
   padding: 0 12px;
   border-radius: 10px;
-  color: var(--muted);
+  color: var(--page-muted);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -191,7 +233,7 @@ a {
 
 .nav-links a:hover,
 .nav-links a:focus-visible {
-  color: var(--ink);
+  color: var(--page-fg);
   background: transparent;
 }
 
@@ -219,7 +261,7 @@ a {
 }
 
 .nav-client:hover {
-  color: var(--ink);
+  color: var(--page-fg);
 }
 
 .nav-links a.nav-links-client,
@@ -246,6 +288,17 @@ a {
   color: var(--cream);
 }
 
+html.night .nav-cta,
+html.night .nav-links a.nav-links-cta {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+html.night .nav-cta:hover {
+  background: var(--pink);
+  color: var(--ink);
+}
+
 .menu-toggle {
   display: none;
   align-items: center;
@@ -254,7 +307,7 @@ a {
   background: transparent;
   min-height: 40px;
   padding: 0 8px 0 10px;
-  color: var(--ink);
+  color: var(--page-fg);
   font: 600 13px/1 var(--font-sans);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -319,11 +372,14 @@ a {
   min-height: 100vh;
   min-height: 100dvh;
   min-height: 100svh;
-  background: #120a15;
-  color: var(--cream);
+  background: var(--page-bg);
+  color: var(--page-fg);
   display: flex;
   align-items: center;
   padding: var(--nav-offset) 0 var(--space-16);
+  transition:
+    background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-bg,
@@ -333,6 +389,15 @@ a {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+}
+
+.hero-bg {
+  opacity: 0.2;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.night .hero-bg {
+  opacity: 1;
 }
 
 .hero-bg *,
@@ -353,6 +418,12 @@ a {
     radial-gradient(circle at 82% 86%, rgba(220, 159, 235, 0.18), transparent 36%),
     linear-gradient(90deg, rgba(9, 4, 12, 0.45), transparent 58%);
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.night .hero::after {
+  opacity: 1;
 }
 
 .hero-content {
@@ -401,7 +472,8 @@ a {
   margin: 0;
   font-size: var(--text-lg);
   line-height: 1.55;
-  color: color-mix(in srgb, var(--cream) 78%, transparent);
+  color: color-mix(in srgb, var(--page-fg) 72%, transparent);
+  transition: color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-copy strong {
@@ -451,10 +523,11 @@ a {
   right: max(24px, calc((100vw - var(--max)) / 2));
   bottom: 24px;
   margin: 0;
-  color: color-mix(in srgb, var(--cream) 55%, transparent);
+  color: color-mix(in srgb, var(--page-fg) 55%, transparent);
   font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  transition: color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .marquee {
@@ -497,8 +570,11 @@ a {
 
 .about {
   padding: var(--space-24) 0;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--page-bg);
+  color: var(--page-fg);
+  transition:
+    background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .about .section-label {
@@ -600,7 +676,11 @@ a {
 
 .work {
   padding: var(--space-24) 0;
-  background: var(--paper);
+  background: var(--page-bg);
+  color: var(--page-fg);
+  transition:
+    background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .work-label {
@@ -632,10 +712,14 @@ a {
   border-radius: var(--radius-md);
   background: var(--surface);
   overflow: hidden;
-  color: inherit;
+  color: var(--ink);
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.night .project {
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.4);
 }
 
 a.project {
@@ -1218,6 +1302,15 @@ footer {
     font-size: 16px;
   }
 
+  html.night .nav-links {
+    background: color-mix(in srgb, var(--page-bg) 97%, transparent);
+    border-color: color-mix(in srgb, var(--page-fg) 10%, transparent);
+  }
+
+  html.night .nav-links a {
+    color: var(--page-fg);
+  }
+
   .hero {
     min-height: 100svh;
     align-items: stretch;
@@ -1405,11 +1498,12 @@ footer {
   }
 
   .blueprint {
-    height: calc(180vh / 0.7);
+    height: auto;
+    min-height: 100svh;
   }
 
   .blueprint-sticky {
-    height: 100svh;
+    min-height: 100svh;
     padding: calc(var(--nav-offset) + 4px) 16px max(16px, env(safe-area-inset-bottom));
     gap: 4px;
   }
@@ -1490,14 +1584,13 @@ footer {
 
 .blueprint {
   position: relative;
-  height: calc(260vh / 0.7);
+  min-height: 100svh;
   background: #120a15;
 }
 
 .blueprint-sticky {
-  position: sticky;
-  top: 0;
-  height: 100svh;
+  position: relative;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -1677,7 +1770,12 @@ footer {
   pointer-events: none;
 }
 
-.hero-cta.trace-btn,
+.hero-cta.trace-btn {
+  --btn-fill-color: var(--page-fg);
+  --btn-label-color: var(--page-bg);
+  --btn-stroke: var(--page-fg);
+}
+
 .contact-button.trace-btn,
 .signin-form .trace-btn {
   --btn-fill-color: var(--cream);
@@ -1728,7 +1826,10 @@ footer {
   stroke-width: 1.8;
 }
 
-.hero-cta .trace-btn-head,
+.hero-cta .trace-btn-head {
+  stroke: var(--page-bg);
+}
+
 .contact-button .trace-btn-head,
 .pane-client .trace-btn-head {
   stroke: #fff;
@@ -1864,17 +1965,17 @@ footer {
 
 @media (max-width: 980px) {
   .blueprint {
-    height: calc(220vh / 0.7);
+    min-height: 100svh;
   }
 }
 
 @media (max-width: 760px) {
   .blueprint {
-    height: calc(180vh / 0.7);
+    min-height: 100svh;
   }
 
   .blueprint-sticky {
-    height: 100svh;
+    min-height: 100svh;
     padding: calc(var(--nav-offset) + 4px) 16px max(16px, env(safe-area-inset-bottom));
     gap: 4px;
   }

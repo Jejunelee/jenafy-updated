@@ -12,7 +12,7 @@ import { StrokeNode, StrokePath } from "@/app/components/motion/StrokePath";
 
 export default function JenafyBlueprint() {
   const trackRef = useRef<HTMLElement>(null);
-  const progress = useScrollDraw(trackRef, "pin");
+  const progress = useScrollDraw(trackRef, "trigger", 4800);
   const [layout, setLayout] = useState<"desktop" | "tablet" | "mobile">(
     "desktop",
   );

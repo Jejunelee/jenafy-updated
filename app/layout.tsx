@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { dmSans, spaceGrotesk } from "@/fonts/fonts";
 import { SITE } from "@/lib/site";
@@ -71,6 +72,11 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
+        <Script
+          src="https://app.jenafy.com/tracker.js"
+          strategy="afterInteractive"
+          data-site-id="jn_d56761e406cc46dd"
+        />
       </body>
     </html>
   );
