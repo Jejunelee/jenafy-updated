@@ -31,47 +31,65 @@ export default function HeroDraw() {
   const progress = useScrollDraw(ref, "trigger", 2600);
   const reduced = useReducedMotion();
   const drawn = progress >= 0.98;
-  const [cycle, setCycle] = useState(0);
-  const [on, setOn] = useState(true);
-  const [looping, setLooping] = useState(false);
+  const [slots, setSlots] = useState<[string, string]>([
+    "platforms",
+    "websites",
+  ]);
+  const [front, setFront] = useState(0);
+  const frontRef = useRef(0);
+  const nextIndex = useRef(0);
 
-  const startedRef = useRef(false);
+  useEffect(() => {
+    frontRef.current = front;
+  }, [front]);
 
   useEffect(() => {
     if (!drawn || reduced) {
-      startedRef.current = false;
-      setLooping(false);
-      setCycle(0);
-      setOn(true);
+      nextIndex.current = 0;
+      frontRef.current = 0;
+      setSlots(["platforms", "websites"]);
+      setFront(0);
       return;
     }
 
     const hold = 2400 / MOTION_SPEED;
-    const fade = 520 / MOTION_SPEED;
-    let fadeTimer = 0;
+    let timer = 0;
+    let cancelled = false;
+    let incomingRaf = 0;
 
-    const id = window.setInterval(() => {
-      if (!startedRef.current) {
-        startedRef.current = true;
-        setLooping(true);
-        setOn(true);
-        return;
-      }
+    const swap = () => {
+      const next = KEYWORDS[nextIndex.current % KEYWORDS.length];
+      nextIndex.current += 1;
+      const incoming = 1 - frontRef.current;
+      setSlots((current) => {
+        const nextSlots: [string, string] = [current[0], current[1]];
+        nextSlots[incoming] = next;
+        return nextSlots;
+      });
+      incomingRaf = window.requestAnimationFrame(() => {
+        incomingRaf = window.requestAnimationFrame(() => {
+          if (cancelled) return;
+          frontRef.current = incoming;
+          setFront(incoming);
+        });
+      });
+    };
 
-      setOn(false);
-      fadeTimer = window.setTimeout(() => {
-        setCycle((i) => (i + 1) % KEYWORDS.length);
-        fadeTimer = window.setTimeout(() => setOn(true), 32);
-      }, fade);
-    }, hold);
+    const tick = () => {
+      swap();
+      timer = window.setTimeout(tick, hold);
+    };
+
+    timer = window.setTimeout(tick, hold);
 
     return () => {
-      window.clearInterval(id);
-      window.clearTimeout(fadeTimer);
+      cancelled = true;
+      window.clearTimeout(timer);
+      window.cancelAnimationFrame(incomingRaf);
     };
   }, [drawn, reduced]);
 
-  const word = KEYWORDS[cycle];
+  const keywordIn = spanProgress(progress, 0.22, 0.45);
 
   return (
     <div ref={ref} className="hero-content">
@@ -82,17 +100,28 @@ export default function HeroDraw() {
       >
         Digital platforms · for businesses that are done guessing
       </TraceType>
-      <h1 className={`hero-headline${looping ? " is-looping" : ""}`}>
-        <TraceType as="span" progress={spanProgress(progress, 0.1, 0.4)}>
-          We build{" "}
-        </TraceType>
-        <span className="hero-keyword" aria-live="polite">
-          <span className="hero-kw-sizer" aria-hidden>
-            automation
-          </span>
-          <span className="hero-kw hero-kw-from">platforms</span>
-          <span className={`hero-kw hero-kw-to${on ? " is-on" : ""}`}>
-            {word}
+      <h1 className="hero-headline">
+        <span className="hero-lead">
+          <TraceType as="span" progress={spanProgress(progress, 0.1, 0.4)}>
+            We build{" "}
+          </TraceType>
+          <span
+            className="hero-keyword"
+            aria-live="polite"
+            style={{ ["--kw-in" as string]: String(keywordIn) }}
+          >
+            <span className="hero-kw-sizer" aria-hidden>
+              automation
+            </span>
+            {slots.map((word, i) => (
+              <span
+                key={i}
+                className={`hero-kw${front === i ? " is-on" : ""}`}
+                aria-hidden={front !== i}
+              >
+                {word}
+              </span>
+            ))}
           </span>
         </span>
         <br />
