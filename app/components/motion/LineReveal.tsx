@@ -12,7 +12,7 @@ export default function LineReveal({
   children: ReactNode;
   className?: string;
   progress?: number;
-  as?: "p" | "div" | "span";
+  as?: "p" | "div" | "span" | "ul";
 }) {
   const ref = useRef<HTMLElement>(null);
   const self = useScrollDraw(ref, "trigger", 1200);
