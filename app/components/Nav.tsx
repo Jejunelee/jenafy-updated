@@ -3,11 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SITE, navLinks } from "@/lib/site";
-import { useNightFromHero } from "@/app/hooks/useNight";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
-  useNightFromHero();
 
   useEffect(() => {
     if (!open) return;
