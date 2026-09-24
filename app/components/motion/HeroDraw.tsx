@@ -69,19 +69,21 @@ export default function HeroDraw() {
       >
         Digital platforms · for businesses that are done guessing
       </TraceType>
-      {drawn ? (
-        <h1 className={`hero-cycle${on ? " is-on" : ""}`} aria-live="polite">
-          We build {line.mid}
-          <br />
-          {line.tail}
-        </h1>
-      ) : (
-        <TraceType as="h1" progress={spanProgress(progress, 0.1, 0.58)}>
-          We build platforms
-          <br />
-          that work.
-        </TraceType>
-      )}
+      <h1 className="hero-headline">
+        {drawn ? (
+          <span className={`hero-cycle${on ? " is-on" : ""}`} aria-live="polite">
+            We build {line.mid}
+            <br />
+            {line.tail}
+          </span>
+        ) : (
+          <TraceType as="span" progress={spanProgress(progress, 0.1, 0.58)}>
+            We build platforms
+            <br />
+            that work.
+          </TraceType>
+        )}
+      </h1>
       <LineReveal
         className="hero-copy"
         progress={spanProgress(progress, 0.48, 0.7)}

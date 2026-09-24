@@ -396,6 +396,18 @@ a {
   letter-spacing: -0.04em;
 }
 
+.hero-headline .trace-type,
+.hero-headline .hero-cycle {
+  display: block;
+  font: inherit;
+  letter-spacing: inherit;
+  max-width: none;
+}
+
+.hero-headline .trace-glyph {
+  letter-spacing: inherit;
+}
+
 .hero-cycle {
   opacity: 0;
   transform: translateY(8px);
@@ -1702,18 +1714,8 @@ footer {
 }
 
 .line-reveal {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    #000 0,
-    #000 calc(var(--reveal, 0) * 100%),
-    transparent calc(var(--reveal, 0) * 100% + 1.1em)
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    #000 0,
-    #000 calc(var(--reveal, 0) * 100%),
-    transparent calc(var(--reveal, 0) * 100% + 1.1em)
-  );
+  clip-path: inset(0 0 calc((1 - var(--reveal, 0)) * 100%) 0);
+  -webkit-clip-path: inset(0 0 calc((1 - var(--reveal, 0)) * 100%) 0);
 }
 
 .trace-btn {
@@ -1963,11 +1965,12 @@ footer {
     justify-content: flex-start;
   }
 
-  .hero h1.trace-type {
-    max-width: min(11ch, 100%);
-    font-size: clamp(30px, 8vw, 36px);
-    line-height: 1;
-    margin: 10px 0 12px;
+  .hero h1.trace-type,
+  .hero-headline .trace-type {
+    max-width: none;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
   }
 
   .hero .eyebrow.trace-type {
