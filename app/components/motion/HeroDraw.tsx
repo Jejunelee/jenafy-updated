@@ -8,11 +8,7 @@ import TraceButton from "@/app/components/motion/TraceButton";
 import TraceLink from "@/app/components/motion/TraceLink";
 import TraceType from "@/app/components/motion/TraceType";
 
-const HEADLINES = [
-  { mid: "websites", tail: "that work." },
-  { mid: "apps", tail: "that work." },
-  { mid: "automation", tail: "that do the work." },
-] as const;
+const KEYWORDS = ["websites", "apps", "automation"] as const;
 
 function CertMark() {
   return (
@@ -64,7 +60,7 @@ export default function HeroDraw() {
 
       setOn(false);
       fadeTimer = window.setTimeout(() => {
-        setCycle((i) => (i + 1) % HEADLINES.length);
+        setCycle((i) => (i + 1) % KEYWORDS.length);
         fadeTimer = window.setTimeout(() => setOn(true), 32);
       }, fade);
     }, hold);
@@ -75,7 +71,7 @@ export default function HeroDraw() {
     };
   }, [drawn, reduced]);
 
-  const line = HEADLINES[cycle];
+  const word = KEYWORDS[cycle];
 
   return (
     <div ref={ref} className="hero-content">
@@ -87,27 +83,22 @@ export default function HeroDraw() {
         Digital platforms · for businesses that are done guessing
       </TraceType>
       <h1 className={`hero-headline${looping ? " is-looping" : ""}`}>
-        <span className="hero-line hero-line-base" aria-hidden={looping}>
-          <TraceType
-            as="span"
-            progress={drawn ? 1 : spanProgress(progress, 0.1, 0.58)}
-          >
-            We build platforms
-            <br />
-            that work.
-          </TraceType>
+        <TraceType as="span" progress={spanProgress(progress, 0.1, 0.4)}>
+          We build{" "}
+        </TraceType>
+        <span className="hero-keyword" aria-live="polite">
+          <span className="hero-kw-sizer" aria-hidden>
+            automation
+          </span>
+          <span className="hero-kw hero-kw-from">platforms</span>
+          <span className={`hero-kw hero-kw-to${on ? " is-on" : ""}`}>
+            {word}
+          </span>
         </span>
-        <span
-          className={`hero-line hero-line-loop${on ? " is-on" : ""}`}
-          aria-live="polite"
-          aria-hidden={!looping}
-        >
-          <TraceType as="span" progress={1}>
-            We build {line.mid}
-            <br />
-            {line.tail}
-          </TraceType>
-        </span>
+        <br />
+        <TraceType as="span" progress={spanProgress(progress, 0.38, 0.58)}>
+          that work.
+        </TraceType>
       </h1>
       <LineReveal
         className="hero-copy"

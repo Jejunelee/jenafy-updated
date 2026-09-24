@@ -390,7 +390,7 @@ a {
 }
 
 .hero h1 {
-  max-width: min(18ch, 100%);
+  max-width: min(22ch, 100%);
   margin: 16px 0 24px;
   font: 700 clamp(40px, 5.6vw, 72px) / 1 var(--font-display);
   letter-spacing: -0.04em;
@@ -400,39 +400,46 @@ a {
   position: relative;
 }
 
-.hero-headline .trace-type,
-.hero-headline .hero-line {
-  display: block;
+.hero-headline .trace-type {
   font: inherit;
   letter-spacing: inherit;
-  max-width: none;
 }
 
 .hero-headline .trace-glyph {
   letter-spacing: inherit;
 }
 
-.hero-line {
+.hero-keyword {
+  display: inline-grid;
+  justify-items: start;
+  vertical-align: baseline;
+}
+
+.hero-kw-sizer,
+.hero-kw {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+}
+
+.hero-kw-sizer {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.hero-kw {
+  opacity: 0;
   transition: opacity calc(0.52s / 0.7);
 }
 
-.hero-line-base {
+.hero-kw-from {
   opacity: 1;
 }
 
-.hero-headline.is-looping .hero-line-base {
+.hero-headline.is-looping .hero-kw-from {
   opacity: 0;
 }
 
-.hero-line-loop {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  opacity: 0;
-}
-
-.hero-headline.is-looping .hero-line-loop.is-on {
+.hero-headline.is-looping .hero-kw-to.is-on {
   opacity: 1;
 }
 
@@ -1305,7 +1312,7 @@ footer {
   }
 
   .hero h1 {
-    max-width: min(16ch, 100%);
+    max-width: min(22ch, 100%);
     margin: 10px 0 12px;
     font-size: clamp(30px, 8vw, 36px);
     line-height: 1;
