@@ -37,6 +37,9 @@ export default function HeroDraw() {
   const drawn = progress >= 0.98;
   const [cycle, setCycle] = useState(0);
   const [on, setOn] = useState(true);
+  const [looping, setLooping] = useState(false);
+
+  const loopingRef = useRef(false);
 
   useEffect(() => {
     if (!drawn || reduced) return;
@@ -47,7 +50,12 @@ export default function HeroDraw() {
     const id = window.setInterval(() => {
       setOn(false);
       fadeTimer = window.setTimeout(() => {
-        setCycle((i) => (i + 1) % HEADLINES.length);
+        if (loopingRef.current) {
+          setCycle((i) => (i + 1) % HEADLINES.length);
+        } else {
+          loopingRef.current = true;
+          setLooping(true);
+        }
         setOn(true);
       }, fade);
     }, hold);
@@ -59,6 +67,8 @@ export default function HeroDraw() {
   }, [drawn, reduced]);
 
   const line = HEADLINES[cycle];
+  const mid = looping ? line.mid : "platforms";
+  const tail = looping ? line.tail : "that work.";
 
   return (
     <div ref={ref} className="hero-content">
@@ -70,19 +80,16 @@ export default function HeroDraw() {
         Digital platforms · for businesses that are done guessing
       </TraceType>
       <h1 className="hero-headline">
-        {drawn ? (
-          <span className={`hero-cycle${on ? " is-on" : ""}`} aria-live="polite">
-            We build {line.mid}
+        <span className={`hero-cycle${on ? " is-on" : ""}`} aria-live="polite">
+          <TraceType
+            as="span"
+            progress={drawn ? 1 : spanProgress(progress, 0.1, 0.58)}
+          >
+            We build {mid}
             <br />
-            {line.tail}
-          </span>
-        ) : (
-          <TraceType as="span" progress={spanProgress(progress, 0.1, 0.58)}>
-            We build platforms
-            <br />
-            that work.
+            {tail}
           </TraceType>
-        )}
+        </span>
       </h1>
       <LineReveal
         className="hero-copy"

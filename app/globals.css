@@ -409,16 +409,12 @@ a {
 }
 
 .hero-cycle {
-  opacity: 0;
-  transform: translateY(8px);
-  transition:
-    opacity calc(0.28s / 0.7),
-    transform calc(0.28s / 0.7);
+  opacity: 1;
+  transition: opacity calc(0.28s / 0.7);
 }
 
-.hero-cycle.is-on {
-  opacity: 1;
-  transform: none;
+.hero-cycle:not(.is-on) {
+  opacity: 0;
 }
 
 .hero-certs {
