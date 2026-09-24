@@ -396,8 +396,12 @@ a {
   letter-spacing: -0.04em;
 }
 
+.hero-headline {
+  position: relative;
+}
+
 .hero-headline .trace-type,
-.hero-headline .hero-cycle {
+.hero-headline .hero-line {
   display: block;
   font: inherit;
   letter-spacing: inherit;
@@ -408,13 +412,28 @@ a {
   letter-spacing: inherit;
 }
 
-.hero-cycle {
-  opacity: 1;
-  transition: opacity calc(0.28s / 0.7);
+.hero-line {
+  transition: opacity calc(0.52s / 0.7);
 }
 
-.hero-cycle:not(.is-on) {
+.hero-line-base {
+  opacity: 1;
+}
+
+.hero-headline.is-looping .hero-line-base {
   opacity: 0;
+}
+
+.hero-line-loop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  opacity: 0;
+}
+
+.hero-headline.is-looping .hero-line-loop.is-on {
+  opacity: 1;
 }
 
 .hero-certs {

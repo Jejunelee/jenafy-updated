@@ -39,24 +39,33 @@ export default function HeroDraw() {
   const [on, setOn] = useState(true);
   const [looping, setLooping] = useState(false);
 
-  const loopingRef = useRef(false);
+  const startedRef = useRef(false);
 
   useEffect(() => {
-    if (!drawn || reduced) return;
+    if (!drawn || reduced) {
+      startedRef.current = false;
+      setLooping(false);
+      setCycle(0);
+      setOn(true);
+      return;
+    }
 
-    const hold = 2800 / MOTION_SPEED;
-    const fade = 280 / MOTION_SPEED;
+    const hold = 2400 / MOTION_SPEED;
+    const fade = 520 / MOTION_SPEED;
     let fadeTimer = 0;
+
     const id = window.setInterval(() => {
+      if (!startedRef.current) {
+        startedRef.current = true;
+        setLooping(true);
+        setOn(true);
+        return;
+      }
+
       setOn(false);
       fadeTimer = window.setTimeout(() => {
-        if (loopingRef.current) {
-          setCycle((i) => (i + 1) % HEADLINES.length);
-        } else {
-          loopingRef.current = true;
-          setLooping(true);
-        }
-        setOn(true);
+        setCycle((i) => (i + 1) % HEADLINES.length);
+        fadeTimer = window.setTimeout(() => setOn(true), 32);
       }, fade);
     }, hold);
 
@@ -67,8 +76,6 @@ export default function HeroDraw() {
   }, [drawn, reduced]);
 
   const line = HEADLINES[cycle];
-  const mid = looping ? line.mid : "platforms";
-  const tail = looping ? line.tail : "that work.";
 
   return (
     <div ref={ref} className="hero-content">
@@ -79,15 +86,26 @@ export default function HeroDraw() {
       >
         Digital platforms · for businesses that are done guessing
       </TraceType>
-      <h1 className="hero-headline">
-        <span className={`hero-cycle${on ? " is-on" : ""}`} aria-live="polite">
+      <h1 className={`hero-headline${looping ? " is-looping" : ""}`}>
+        <span className="hero-line hero-line-base" aria-hidden={looping}>
           <TraceType
             as="span"
             progress={drawn ? 1 : spanProgress(progress, 0.1, 0.58)}
           >
-            We build {mid}
+            We build platforms
             <br />
-            {tail}
+            that work.
+          </TraceType>
+        </span>
+        <span
+          className={`hero-line hero-line-loop${on ? " is-on" : ""}`}
+          aria-live="polite"
+          aria-hidden={!looping}
+        >
+          <TraceType as="span" progress={1}>
+            We build {line.mid}
+            <br />
+            {line.tail}
           </TraceType>
         </span>
       </h1>
